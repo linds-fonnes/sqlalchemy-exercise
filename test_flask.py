@@ -57,8 +57,8 @@ class UserRoutesTestCase(TestCase):
         """ /users/<int:user_id>/delete route - tests that deleting a user removes them from db & /users page"""
         with app.test_client() as client:
             
-            resp = client.post("/users/2/delete",follow_redirects=True)
+            resp = client.post("/users/1/delete",follow_redirects=True)
             html = resp.get_data(as_text=True)
             self.assertEqual(resp.status_code, 200)
-            self.assertNotIn('<a href="/users/2">TestGuy Jones III</a>', html)
+            self.assertNotIn('<a href="/users/1">Testy Jones</a>',html)
         
