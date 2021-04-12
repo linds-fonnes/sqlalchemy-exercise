@@ -8,11 +8,50 @@
   />
 </div>
 <h1>{{user.first_name}} {{user.last_name}}</h1>
-<form action="/users/{{user.id}}/edit">
-  <button type="submit" class="btn btn-primary">Edit</button>
-</form>
-<form action="/users/{{user.id}}/delete" method="POST">
-  <button type="submit" class="btn btn-danger">Delete</button>
+<form>
+  <button
+    type="submit"
+    class="btn btn-dark"
+    formmethod="GET"
+    formaction="/users"
+  >
+    Back to Users
+  </button>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    formmethod="GET"
+    formaction="/users/{{user.id}}/edit"
+  >
+    Edit
+  </button>
+  <button
+    type="submit"
+    formmethod="POST"
+    formaction="/users/{{user.id}}/delete"
+    class="btn btn-danger"
+  >
+    Delete
+  </button>
 </form>
 
+<h2>Posts</h2>
+<ul>
+  {% for post in user.posts %}
+  <li>
+    <a href="/posts/{{post.id}}">{{post.title}}</a>
+  </li>
+  {% endfor %}
+</ul>
+
+<form>
+  <button
+    type="submit"
+    formmethod="GET"
+    formaction="/users/{{user.id}}/posts/new"
+    class="btn btn-primary"
+  >
+    Add A Post
+  </button>
+</form>
 {% endblock %}
