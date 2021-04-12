@@ -19,11 +19,10 @@ class UserRoutesTestCase(TestCase):
         User.query.delete()
         
         user = User(first_name="Testy", last_name="Jones", image_url="https://mymodernmet.com/wp/wp-content/uploads/2017/10/highland-cattle-calves-6.jpg")
-        
         db.session.add(user)
         db.session.commit()
 
-        post = Post(title="Test", content="Testing", user_id=1)
+        post = Post(title="Test", content="Testing", user_id=user.id)
         db.session.add(post)
         db.session.commit()
 
@@ -63,7 +62,7 @@ class UserRoutesTestCase(TestCase):
             self.assertEqual(resp.status_code,200)
             self.assertIn('<a href="/users/2">TestGuy Jones III</a>', html)
 
-    def test_edit_user(self):
+    def test_delete_user(self):
         """ /users/<int:user_id>/delete route - tests that deleting a user removes them from db & /users page"""
         with app.test_client() as client:
             
@@ -73,11 +72,41 @@ class UserRoutesTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertNotIn('<a href="/users/1">Testy Jones</a>',html)
         
-    # def test_show_post(self):
-    #     """ /posts/<int:post_id> route - test that post info page loads"""
-    #     with app.test_client() as client:
-    #         resp = client.get("/posts/1")
-    #         html = resp.get_data(as_text=True)
+    def test_show_post(self):
+        """ /posts/<int:post_id> route - test that post info page loads"""
+        with app.test_client() as client:
+            resp = client.get("/posts/1")
+            html = resp.get_data(as_text=True)
 
-    #         self.assertEqual(resp.status_code, 200)
-    #         self.assertIn('<h1>Test</h1>', html)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<h1>Test</h1>', html)
+
+    def test_edit_post_form(self):
+        """ GET /posts/<int:post_id>/edit route- tests form page to edit post"""
+        with app.test_client() as client:
+            resp = client.get("/posts/1/edit")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<label for="title">Title: </label>', html)
+
+    def test_edit_post(self):
+        """ POST /posts/<int:post_id>/edit route- tests editing a post"""
+        with app.test_client() as client:
+            d = {"title":"Test2","content":"Testing2","user_id":1}
+            resp = client.post("/posts/1/edit", data=d, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code,200)
+            self.assertIn('<h1>Test2</h1>', html)
+
+    def test_delete_post(self):
+        """POST /posts/<int:post_id>/delete route - tests deleting a post"""
+        with app.test_client() as client:
+            resp = client.post("/posts/1/delete", follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code,200)
+            self.assertNotIn('<h1>Test</h1>',html)                
+
+    

@@ -26,6 +26,7 @@ class User(db.Model):
     image_url = db.Column(db.Text, nullable=False,
                           default="http://www.advancedsec.com/wp-content/uploads/2018/11/profile-blank.png")
 
+    posts = db.relationship("Post", backref="user", cascade="all, delete-orphan")
 
 class Post(db.Model):
     """Post"""
@@ -43,5 +44,4 @@ class Post(db.Model):
                            default=datetime.datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    user = db.relationship('User', backref='posts')
     
