@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block title %} All Tags {% endblock %} {% block
+content %}
+<h1>All Tags</h1>
+<ul>
+  {% for tag in tags %}
+  <li>
+    <a href="/tags/{{tag.id}}">{{tag.name}}</a>
+  </li>
+  {% endfor %}
+</ul>
+<form>
+  <button
+    type="submit"
+    class="btn btn-secondary"
+    formmethod="GET"
+    formaction="/"
+  >
+    Back to Users
+  </button>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    formmethod="GET"
+    formaction="/tags/new"
+  >
+    Add Tag
+  </button>
+</form>
+
+{% endblock %}

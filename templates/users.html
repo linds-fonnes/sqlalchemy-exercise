@@ -8,8 +8,23 @@ content %}
   </li>
   {% endfor %}
 </ul>
-<form action="/users/new">
-  <button type="submit" class="btn btn-secondary">Add User</button>
+<form>
+  <button
+    type="submit"
+    class="btn btn-secondary"
+    formmethod="GET"
+    formaction="/users/new"
+  >
+    Add User
+  </button>
+  <button
+    type="submit"
+    class="btn btn-secondary"
+    formmethod="GET"
+    formaction="/tags"
+  >
+    View Tags
+  </button>
 </form>
 
 {% endblock %}
